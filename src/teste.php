@@ -16,12 +16,11 @@ $response = $client->request('GET', 'https://statusinvest.com.br/fundos-imobilia
 
 $crawler = new Crawler();
 $crawler->addHtmlContent($response->getBody());
-
+//var_dump($crawler->filter('.top-info .info'));die('fred');
 foreach ($crawler->filter('.top-info .info') as $key => $domElement) {
 
     $domElementSanetize = str_replace("\n","",$domElement->nodeValue);
     $statusInvest->setElement($domElementSanetize);
-
     if($key == 0){
         $currentPrice = $statusInvest->currentPrice();
     }
@@ -40,6 +39,10 @@ foreach ($crawler->filter('.top-info .info') as $key => $domElement) {
 
     if($key == 4){
         $appreciation = $statusInvest->appreciation();
+    }
+
+    if($key == 5){
+        $patrimony = $statusInvest->patrimony();
     }
 }
 

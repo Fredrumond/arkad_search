@@ -16,6 +16,8 @@ class Active
     private $dividendYieldPercent;
     private $appreciationLast12Months;
     private $appreciationCurrentMonths;
+    private $patrimonyQuota;
+    private $patrimonyTotal;
 
     public function price($price)
     {
@@ -67,9 +69,19 @@ class Active
         $this->appreciationCurrentMonths = $appreciationCurrentMonths;
     }
 
-    public function infos() : array
+    public function patrimonyQuota($patrimonyQuota)
     {
-        return [
+        $this->patrimonyQuota = $patrimonyQuota;
+    }
+
+    public function patrimonyTotal($patrimonyTotal)
+    {
+        $this->patrimonyTotal = $patrimonyTotal;
+    }
+
+    public function infos():object
+    {
+        return (object)[
             "current" => [
                 "price" => $this->price,
                 "variation" => $this->variation,
@@ -84,14 +96,18 @@ class Active
                     "max" => $this->maxPriceMonth,
                     ]
                 ],
-                "dividendYield" => [
-                    "percent" => $this->dividendYieldPercent,
-                    "value" => $this->dividendYieldValue
-                ],
-                "variation" => [
-                    "last12Months" => $this->appreciationLast12Months,
-                    "currentMonths" => $this->appreciationCurrentMonths,
-                ]
+            "dividendYield" => [
+                "percent" => $this->dividendYieldPercent,
+                "value" => $this->dividendYieldValue
+            ],
+            "variation" => [
+                "last12Months" => $this->appreciationLast12Months,
+                "currentMonths" => $this->appreciationCurrentMonths,
+            ],
+            "patrimony" => [
+                "quota" => $this->patrimonyQuota,
+                "total" => $this->patrimonyTotal
+            ]
         ];
     }
 }

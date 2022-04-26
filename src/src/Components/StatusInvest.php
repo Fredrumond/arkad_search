@@ -79,5 +79,12 @@ class StatusInvest
         }
     }
 
+    public function patrimony(): void
+    {
+        $data = explode("Patrimônio",$this->element);
+        $this->active->patrimonyQuota(explode("R$",$data[0])[1]);
+        $this->active->patrimonyTotal(str_replace(" ","",explode("R$",$data[1])[1]));
+    }
+
     
 }
