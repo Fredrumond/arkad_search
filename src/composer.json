@@ -1,0 +1,14 @@
+{
+    "name": "fredrumond/arkad-crawler",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Fredrumond\\ArkadCrawler\\": "src/"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^7.4",
+        "symfony/dom-crawler": "^6.0",
+        "symfony/css-selector": "^6.0"
+    }
+}
