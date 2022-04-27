@@ -2,7 +2,6 @@
 
 namespace Fredrumond\ArkadCrawler\Domain;
 
-
 class Active
 {
     private $name;
@@ -79,7 +78,7 @@ class Active
         $this->patrimonyTotal = $patrimonyTotal;
     }
 
-    public function infos():object
+    public function infos(): object
     {
         return (object)[
             "current" => [
