@@ -84,4 +84,12 @@ class StatusInvest
         $this->active->patrimonyQuota(explode("R$", $data[0])[1]);
         $this->active->patrimonyTotal(str_replace(" ", "", explode("R$", $data[1])[1]));
     }
+
+    public function pvp(): void
+    {
+        $data = explode("Valor de mercado", $this->element);
+        $this->active->pvp(explode("P/VP", $data[0])[1]);
+        $this->active->marketValue(str_replace(" ", "", explode("R$", $data[1])[1]));
+        var_dump($data);
+    }
 }

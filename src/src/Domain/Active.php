@@ -17,6 +17,8 @@ class Active
     private $appreciationCurrentMonths;
     private $patrimonyQuota;
     private $patrimonyTotal;
+    private $pvp;
+    private $marketValue;
 
     public function price($price)
     {
@@ -78,6 +80,16 @@ class Active
         $this->patrimonyTotal = $patrimonyTotal;
     }
 
+    public function pvp($pvp)
+    {
+        $this->pvp = $pvp;
+    }
+
+    public function marketValue($marketValue)
+    {
+        $this->marketValue = $marketValue;
+    }
+
     public function infos(): object
     {
         return (object)[
@@ -106,7 +118,9 @@ class Active
             "patrimony" => [
                 "quota" => $this->patrimonyQuota,
                 "total" => $this->patrimonyTotal
-            ]
+            ],
+            "p/vp" => $this->pvp,
+            "marketValue" => $this->marketValue
         ];
     }
 }
