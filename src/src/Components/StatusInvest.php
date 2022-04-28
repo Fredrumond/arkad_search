@@ -97,6 +97,12 @@ class StatusInvest
         $data = explode("Total", $this->element);
         $this->active->cashValuePercent(str_replace("%", "", explode("Valor em caixa", $data[0])[1]));
         $this->active->cashValue(str_replace(" ", "", explode("R$", $data[1])[1]));
-        var_dump($data);
+    }
+
+    public function quotas(): void
+    {
+        $data = explode("Nº de Cotas", $this->element);
+        $this->active->quotaHolders(explode("Nº de Cotistas", $data[0])[1]);
+        $this->active->quotas($data[1]);
     }
 }

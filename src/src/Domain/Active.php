@@ -21,6 +21,8 @@ class Active
     private $marketValue;
     private $cashValue;
     private $cashValuePercent;
+    private $quotaHolders;
+    private $quotas;
 
     public function price($price)
     {
@@ -102,6 +104,16 @@ class Active
         $this->cashValuePercent = $cashValuePercent;
     }
 
+    public function quotaHolders($quotaHolders)
+    {
+        $this->quotaHolders = $quotaHolders;
+    }
+
+    public function quotas($quotas)
+    {
+        $this->quotas = $quotas;
+    }
+
     public function infos(): object
     {
         return (object)[
@@ -131,12 +143,16 @@ class Active
                 "quota" => $this->patrimonyQuota,
                 "total" => $this->patrimonyTotal
             ],
-            "p/vp" => $this->pvp,
-            "marketValue" => $this->marketValue,
             "cash" => [
                 "value" => $this->cashValue,
                 "percent" => $this->cashValuePercent
-            ]
+            ],
+            "quotas" => [
+                "quotaHolders" => $this->quotaHolders,
+                "total" => $this->quotas
+            ],
+            "p/vp" => $this->pvp,
+            "marketValue" => $this->marketValue,
         ];
     }
 }
