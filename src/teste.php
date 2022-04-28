@@ -48,6 +48,10 @@ foreach ($crawler->filter('.top-info .info') as $key => $domElement) {
     if($key == 6){
         $pvp = $statusInvest->pvp();
     }
+
+    if($key == 7){
+        $pvp = $statusInvest->cashValue();
+    }
 }
 
 // var_dump($statusInvest->generateInfos());

@@ -19,6 +19,8 @@ class Active
     private $patrimonyTotal;
     private $pvp;
     private $marketValue;
+    private $cashValue;
+    private $cashValuePercent;
 
     public function price($price)
     {
@@ -90,6 +92,16 @@ class Active
         $this->marketValue = $marketValue;
     }
 
+    public function cashValue($cashValue)
+    {
+        $this->cashValue = $cashValue;
+    }
+
+    public function cashValuePercent($cashValuePercent)
+    {
+        $this->cashValuePercent = $cashValuePercent;
+    }
+
     public function infos(): object
     {
         return (object)[
@@ -120,7 +132,11 @@ class Active
                 "total" => $this->patrimonyTotal
             ],
             "p/vp" => $this->pvp,
-            "marketValue" => $this->marketValue
+            "marketValue" => $this->marketValue,
+            "cash" => [
+                "value" => $this->cashValue,
+                "percent" => $this->cashValuePercent
+            ]
         ];
     }
 }

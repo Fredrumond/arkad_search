@@ -90,6 +90,13 @@ class StatusInvest
         $data = explode("Valor de mercado", $this->element);
         $this->active->pvp(explode("P/VP", $data[0])[1]);
         $this->active->marketValue(str_replace(" ", "", explode("R$", $data[1])[1]));
+    }
+
+    public function cashValue(): void
+    {
+        $data = explode("Total", $this->element);
+        $this->active->cashValuePercent(str_replace("%", "", explode("Valor em caixa", $data[0])[1]));
+        $this->active->cashValue(str_replace(" ", "", explode("R$", $data[1])[1]));
         var_dump($data);
     }
 }
