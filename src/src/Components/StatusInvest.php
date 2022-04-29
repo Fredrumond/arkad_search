@@ -7,7 +7,6 @@ use Fredrumond\ArkadCrawler\Domain\Active;
 class StatusInvest
 {
     private $element;
-
     private $active;
 
     public function __construct(Active $active)
