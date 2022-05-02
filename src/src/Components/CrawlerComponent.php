@@ -18,8 +18,8 @@ class CrawlerComponent
         $this->crawler->addContent($content);
     }
 
-    public function filter($dataSource,$type)
+    public function filter($dataSource, $type)
     {
-        return $this->crawler->filter($dataSource,$type);
+        return $this->crawler->filter($dataSource, $type);
     }
 }

@@ -19,51 +19,49 @@ class DomCrawlerAdapter implements CrawlerAdapter
         $this->content =  $this->crawler->addHtmlContent($content);
     }
 
-    public function filter($dataSource,$type)
+    public function filter($dataSource, $type)
     {
         foreach ($this->crawler->filter('.top-info .info') as $key => $domElement) {
-            $domElementSanetize = str_replace("\n","",$domElement->nodeValue);
+            $domElementSanetize = str_replace("\n", "", $domElement->nodeValue);
             $dataSource->setElement($domElementSanetize);
 
-            if($key == 0){
+            if ($key == 0) {
                 $dataSource->currentPrice();
             }
 
-            if($key == 1){
+            if ($key == 1) {
                 $dataSource->minPrice();
             }
 
-            if($key == 2){
+            if ($key == 2) {
                 $dataSource->maxPrice();
             }
 
-            if($key == 3){
+            if ($key == 3) {
                 $dataSource->dividendYield();
             }
 
-            if($key == 4){
+            if ($key == 4) {
                 $dataSource->appreciation();
             }
 
-            if($type !== 'acoes'){
-                if($key == 5){
+            if ($type !== 'acoes') {
+                if ($key == 5) {
                     $dataSource->patrimony();
                 }
 
-                if($key == 6){
+                if ($key == 6) {
                     $dataSource->pvp();
                 }
 
-                if($key == 7){
+                if ($key == 7) {
                     $dataSource->cashValue();
                 }
 
-                if($key == 10){
+                if ($key == 10) {
                     $dataSource->quotas();
                 }
             }
-
-
         }
 
         return true;

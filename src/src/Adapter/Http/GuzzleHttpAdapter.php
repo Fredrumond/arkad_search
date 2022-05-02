@@ -13,6 +13,6 @@ class GuzzleHttpAdapter implements HttpAdapter
 
     public function get(string $method, string $url)
     {
-        return $this->client->request($method,$url);
+        return $this->client->request($method, $url);
     }
 }

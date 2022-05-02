@@ -12,16 +12,16 @@ use Fredrumond\ArkadCrawler\Domain\Active\ActiveFundo;
 
 class ArkadCrawlerService
 {
-    CONST URL_BASE = 'https://statusinvest.com.br/';
-    CONST ACAO = 'acoes/';
-    CONST FUNDO = 'fundos-imobiliarios/';
+    private const URL_BASE = 'https://statusinvest.com.br/';
+    private const ACAO = 'acoes/';
+    private const FUNDO = 'fundos-imobiliarios/';
 
     private $url;
     private $type;
     private $action;
     private $active;
 
-    public function __construct(Array $config)
+    public function __construct(array $config)
     {
         $this->type = $config['type'];
         $this->action = $config['type'] === 'acoes' ? self::ACAO : self::FUNDO;
@@ -35,9 +35,9 @@ class ArkadCrawlerService
 
     public function search()
     {
-        $response = $this->httpClient->get('GET',$this->url);
+        $response = $this->httpClient->get('GET', $this->url);
         $this->crawler->addContent($response->getBody());
-        $this->crawler->filter($this->dataSource,$this->type);
+        $this->crawler->filter($this->dataSource, $this->type);
 
         return $this->active->infos();
     }
