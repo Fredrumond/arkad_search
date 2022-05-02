@@ -2,7 +2,9 @@
 
 namespace Fredrumond\ArkadCrawler\Service;
 
-use Fredrumond\ArkadCrawler\Components\StatusInvest;
+use Fredrumond\ArkadCrawler\Adapter\GuzzleHttpAdapter;
+use Fredrumond\ArkadCrawler\Components\HttpComponent;
+use Fredrumond\ArkadCrawler\Components\StatusInvestComponent;
 use Fredrumond\ArkadCrawler\Domain\Active\ActiveAcao;
 use Fredrumond\ArkadCrawler\Domain\Active\ActiveFundo;
 use Symfony\Component\DomCrawler\Crawler;
@@ -26,10 +28,10 @@ class ArkadCrawlerService
     public function search()
     {
         $active = $this->type === 'acoes' ? new ActiveAcao() : new ActiveFundo();
-        $statusInvest = new StatusInvest($active);
-        $client = new \GuzzleHttp\Client();
+        $statusInvest = new StatusInvestComponent($active);
 
-        $response = $client->request('GET', $this->url);
+        $client = new HttpComponent(new GuzzleHttpAdapter());
+        $response = $client->get('GET',$this->url);
 
         $crawler = new Crawler();
         $crawler->addHtmlContent($response->getBody());

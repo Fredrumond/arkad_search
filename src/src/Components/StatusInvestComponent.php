@@ -4,7 +4,7 @@ namespace Fredrumond\ArkadCrawler\Components;
 
 use Fredrumond\ArkadCrawler\Domain\Active\ActiveInterface;
 
-class StatusInvest
+class StatusInvestComponent
 {
     private $element;
     private $active;
