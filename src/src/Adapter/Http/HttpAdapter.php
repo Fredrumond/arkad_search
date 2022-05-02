@@ -1,6 +1,6 @@
 <?php
 
-namespace Fredrumond\ArkadCrawler\Adapter;
+namespace Fredrumond\ArkadCrawler\Adapter\Http;
 
 interface HttpAdapter
 {

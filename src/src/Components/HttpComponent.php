@@ -2,7 +2,7 @@
 
 namespace Fredrumond\ArkadCrawler\Components;
 
-use Fredrumond\ArkadCrawler\Adapter\HttpAdapter;
+use Fredrumond\ArkadCrawler\Adapter\Http\HttpAdapter;
 
 class HttpComponent
 {
