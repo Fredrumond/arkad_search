@@ -1,8 +1,8 @@
 <?php
 
-namespace Fredrumond\ArkadCrawler\Domain;
+namespace Fredrumond\ArkadCrawler\Domain\Active;
 
-class Active
+class ActiveFundo implements ActiveInterface
 {
     private $name;
     private $price;

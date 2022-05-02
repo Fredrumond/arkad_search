@@ -2,14 +2,14 @@
 
 namespace Fredrumond\ArkadCrawler\Components;
 
-use Fredrumond\ArkadCrawler\Domain\Active;
+use Fredrumond\ArkadCrawler\Domain\Active\ActiveInterface;
 
 class StatusInvest
 {
     private $element;
     private $active;
 
-    public function __construct(Active $active)
+    public function __construct(ActiveInterface $active)
     {
         $this->active = $active;
     }

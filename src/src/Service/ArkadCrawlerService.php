@@ -2,9 +2,10 @@
 
 namespace Fredrumond\ArkadCrawler\Service;
 
-use Symfony\Component\DomCrawler\Crawler;
 use Fredrumond\ArkadCrawler\Components\StatusInvest;
-use Fredrumond\ArkadCrawler\Domain\Active;
+use Fredrumond\ArkadCrawler\Domain\Active\ActiveAcao;
+use Fredrumond\ArkadCrawler\Domain\Active\ActiveFundo;
+use Symfony\Component\DomCrawler\Crawler;
 
 class ArkadCrawlerService
 {
@@ -13,17 +14,18 @@ class ArkadCrawlerService
     CONST FUNDO = 'fundos-imobiliarios/';
 
     private $url;
+    private $type;
 
     public function __construct(Array $config)
     {
-
+        $this->type = $config['type'];
         $type = $config['type'] === 'acoes' ? self::ACAO : self::FUNDO;
         $this->url = self::URL_BASE . $type . $config['code'];
     }
 
     public function search()
     {
-        $active = new Active();
+        $active = $this->type === 'acoes' ? new ActiveAcao() : new ActiveFundo();
         $statusInvest = new StatusInvest($active);
         $client = new \GuzzleHttp\Client();
 
@@ -56,21 +58,25 @@ class ArkadCrawlerService
                 $appreciation = $statusInvest->appreciation();
             }
 
-            if($key == 5){
-                $patrimony = $statusInvest->patrimony();
+            if($this->type !== 'acoes'){
+                if($key == 5){
+                    $patrimony = $statusInvest->patrimony();
+                }
+
+                if($key == 6){
+                    $pvp = $statusInvest->pvp();
+                }
+
+                if($key == 7){
+                    $pvp = $statusInvest->cashValue();
+                }
+
+                if($key == 10){
+                    $quotas = $statusInvest->quotas();
+                }
             }
 
-            if($key == 6){
-                $pvp = $statusInvest->pvp();
-            }
 
-            if($key == 7){
-                $pvp = $statusInvest->cashValue();
-            }
-
-            if($key == 10){
-                $quotas = $statusInvest->quotas();
-            }
         }
 
         return $active->infos();
