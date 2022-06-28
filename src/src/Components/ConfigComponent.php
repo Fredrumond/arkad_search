@@ -4,6 +4,7 @@ namespace Fredrumond\ArkadCrawler\Components;
 
 use Fredrumond\ArkadCrawler\Domain\Active\ActiveAcao;
 use Fredrumond\ArkadCrawler\Domain\Active\ActiveFundo;
+use Fredrumond\ArkadCrawler\Domain\Active\ActiveInterface;
 
 class ConfigComponent
 {
@@ -18,28 +19,23 @@ class ConfigComponent
         $this->config = $config;
     }
 
-    public function extract()
+    public function extractCodes(): array
     {
-        return [
-            "type" => $this->config['type'],
-            "url" => $this->extractUrl(),
-            "active" => $this->extractActive(),
-            "codes" => $this->config['codes']
-        ];
+        return $this->config['codes'];
     }
 
-    private function extractAction(): string
+    public function extractUrl($type): string
     {
-        return $this->config['type'] === 'acoes' ? self::ACAO : self::FUNDO;
+        return self::URL_BASE . $this->extractAction($type);
     }
 
-    private function extractUrl(): string
+    public function extractActive($type): ActiveInterface
     {
-        return self::URL_BASE . $this->extractAction();
+        return $type === 'acoes' ? new ActiveAcao() : new ActiveFundo();
     }
 
-    private function extractActive()
+    private function extractAction($type): string
     {
-        return $this->config['type'] === 'acoes' ? new ActiveAcao() : new ActiveFundo();
+        return $type === 'acoes' ? self::ACAO : self::FUNDO;
     }
 }

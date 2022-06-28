@@ -8,46 +8,42 @@ use Fredrumond\ArkadCrawler\Components\ConfigComponent;
 use Fredrumond\ArkadCrawler\Components\CrawlerComponent;
 use Fredrumond\ArkadCrawler\Components\HttpComponent;
 use Fredrumond\ArkadCrawler\Components\StatusInvestComponent;
-//use Fredrumond\ArkadCrawler\Domain\Active\ActiveAcao;
-//use Fredrumond\ArkadCrawler\Domain\Active\ActiveFundo;
 
 class ArkadCrawlerService
 {
-//    private const URL_BASE = 'https://statusinvest.com.br/';
-//    private const ACAO = 'acoes/';
-//    private const FUNDO = 'fundos-imobiliarios/';
-
-    private $url;
-    private $type;
-    private $active;
     private $codes;
+    private $settings;
 
     public function __construct(array $config)
     {
-        $settings = new ConfigComponent($config);
-        $configInformation = $settings->extract();
-
-        $this->type = $configInformation['type'];
-        $this->url = $configInformation['url'];
-        $this->active = $configInformation['active'];
-        $this->codes = $configInformation['codes'];
-
+        $this->settings = new ConfigComponent($config);
+        $this->codes = $this->settings->extractCodes();
         $this->httpClient = new HttpComponent(new GuzzleHttpAdapter());
-        $this->dataSource = new StatusInvestComponent($this->active);
     }
 
     public function search(): array
     {
         $infos = [];
-        foreach ($this->codes as $code){
-            $crawler = new CrawlerComponent(new DomCrawlerAdapter());
-            $response = $this->httpClient->get('GET', $this->url . $code);
-            $crawler->addContent($response->getBody());
-            $crawler->filter($this->dataSource, $this->type);
+        foreach ($this->codes['acoes'] as $code) {
+            $infos[] = $this->process('acoes', $code);
+        }
 
-            $infos[] = $this->active->infos();
+        foreach ($this->codes['fundos'] as $code) {
+            $infos[] = $this->process('fundos', $code);
         }
 
         return $infos;
+    }
+
+    private function process($type, $code)
+    {
+        $active = $this->settings->extractActive($type);
+        $crawler = new CrawlerComponent(new DomCrawlerAdapter());
+        $dataSource = new StatusInvestComponent($active);
+        $response = $this->httpClient->get('GET', $this->settings->extractUrl($type) . $code);
+        $crawler->addContent($response->getBody());
+        $crawler->filter($dataSource, $type);
+
+        return $active->infos();
     }
 }
