@@ -2,76 +2,47 @@
 
 namespace Fredrumond\ArkadCrawler\Service;
 
-use Symfony\Component\DomCrawler\Crawler;
-use Fredrumond\ArkadCrawler\Components\StatusInvest;
-use Fredrumond\ArkadCrawler\Domain\Active;
+use Fredrumond\ArkadCrawler\Adapter\Crawler\DomCrawlerAdapter;
+use Fredrumond\ArkadCrawler\Adapter\Http\GuzzleHttpAdapter;
+use Fredrumond\ArkadCrawler\Components\ConfigComponent;
+use Fredrumond\ArkadCrawler\Components\CrawlerComponent;
+use Fredrumond\ArkadCrawler\Components\HttpComponent;
+use Fredrumond\ArkadCrawler\Components\StatusInvestComponent;
 
 class ArkadCrawlerService
 {
-    CONST URL_BASE = 'https://statusinvest.com.br/';
-    CONST ACAO = 'acoes/';
-    CONST FUNDO = 'fundos-imobiliarios/';
+    private $codes;
+    private $settings;
 
-    private $url;
-
-    public function __construct(Array $config)
+    public function __construct(array $config)
     {
-
-        $type = $config['type'] === 'acoes' ? self::ACAO : self::FUNDO;
-        $this->url = self::URL_BASE . $type . $config['code'];
+        $this->settings = new ConfigComponent($config);
+        $this->codes = $this->settings->extractCodes();
+        $this->httpClient = new HttpComponent(new GuzzleHttpAdapter());
     }
 
-    public function search()
+    public function search(): array
     {
-        $active = new Active();
-        $statusInvest = new StatusInvest($active);
-        $client = new \GuzzleHttp\Client();
-
-        $response = $client->request('GET', $this->url);
-
-        $crawler = new Crawler();
-        $crawler->addHtmlContent($response->getBody());
-
-        foreach ($crawler->filter('.top-info .info') as $key => $domElement) {
-
-            $domElementSanetize = str_replace("\n","",$domElement->nodeValue);
-            $statusInvest->setElement($domElementSanetize);
-            if($key == 0){
-                $currentPrice = $statusInvest->currentPrice();
-            }
-
-            if($key == 1){
-                $minPrice = $statusInvest->minPrice();
-            }
-
-            if($key == 2){
-                $maxPrice = $statusInvest->maxPrice();
-            }
-
-            if($key == 3){
-                $dividendYield = $statusInvest->dividendYield();
-            }
-
-            if($key == 4){
-                $appreciation = $statusInvest->appreciation();
-            }
-
-            if($key == 5){
-                $patrimony = $statusInvest->patrimony();
-            }
-
-            if($key == 6){
-                $pvp = $statusInvest->pvp();
-            }
-
-            if($key == 7){
-                $pvp = $statusInvest->cashValue();
-            }
-
-            if($key == 10){
-                $quotas = $statusInvest->quotas();
-            }
+        $infos = [];
+        foreach ($this->codes['acoes'] as $code) {
+            $infos[] = $this->process('acoes', $code);
         }
+
+        foreach ($this->codes['fundos'] as $code) {
+            $infos[] = $this->process('fundos', $code);
+        }
+
+        return $infos;
+    }
+
+    private function process($type, $code)
+    {
+        $active = $this->settings->extractActive($type);
+        $crawler = new CrawlerComponent(new DomCrawlerAdapter());
+        $dataSource = new StatusInvestComponent($active);
+        $response = $this->httpClient->get('GET', $this->settings->extractUrl($type) . $code);
+        $crawler->addContent($response->getBody());
+        $crawler->filter($dataSource, $type);
 
         return $active->infos();
     }
