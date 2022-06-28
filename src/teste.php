@@ -10,8 +10,12 @@ use Fredrumond\ArkadCrawler\Service\ArkadCrawlerService;
 //];
 $config = [
     "type" => 'acoes',
-    "code" => "itub3"
+    "codes" => ["itub3","sapr4"]
 ];
+//$config = [
+//    "type" => 'acoes',
+//    "codes" => ["itub3"]
+//];
 
 $service = new ArkadCrawlerService($config);
 var_dump($service->search());
