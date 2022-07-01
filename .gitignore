@@ -1,4 +1,5 @@
-docker-compose.yml
-docker/
-src/vendor
+vendor
 .idea/
+docker
+teste.php
+docker-compose.yml
