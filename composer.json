@@ -1,11 +1,16 @@
 {
     "name": "fredrumond/arkad-crawler",
     "type": "library",
+    "authors": [{
+        "name": "fredrumond",
+        "email": "fredrumond@gmail.com"
+    }],
     "autoload": {
         "psr-4": {
             "Fredrumond\\ArkadCrawler\\": "src/"
         }
     },
+    "minimum-stability": "stable",
     "require": {
         "guzzlehttp/guzzle": "^7.4",
         "symfony/dom-crawler": "^6.0",
