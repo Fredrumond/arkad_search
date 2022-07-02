@@ -23,4 +23,14 @@ class ArkadCrawlerServiceTest extends TestCase
         ];
         $service = new ArkadCrawlerService($config);
     }
+
+    public function testInitServiceInvalidCodeNodes()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Code needs a fundos and/or ações node");
+        $config = [
+            "codes" =>[]
+        ];
+        $service = new ArkadCrawlerService($config);
+    }
 }

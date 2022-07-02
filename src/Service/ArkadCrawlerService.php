@@ -26,6 +26,10 @@ class ArkadCrawlerService
             throw new \InvalidArgumentException("Code node not found");
         }
 
+        if (!array_key_exists("acoes",$config['codes']) || !array_key_exists("fundos",$config['codes'])){
+            throw new \InvalidArgumentException("Code needs a fundos and/or ações node");
+        }
+
         $this->settings = new ConfigComponent($config);
         $this->codes = $this->settings->extractCodes();
         $this->httpClient = new HttpComponent(new GuzzleHttpAdapter());
