@@ -26,8 +26,16 @@ class ArkadCrawlerService
             throw new \InvalidArgumentException("Code node not found");
         }
 
-        if (!array_key_exists("acoes",$config['codes']) || !array_key_exists("fundos",$config['codes'])){
+        if (!array_key_exists("acoes",$config['codes']) && !array_key_exists("fundos",$config['codes'])){
             throw new \InvalidArgumentException("Code needs a fundos and/or ações node");
+        }
+
+        if(isset($config['codes']['acoes']) && empty($config['codes']['acoes'])){
+            throw new \InvalidArgumentException("Acoes node cannot be empty");
+        }
+
+        if(isset($config['codes']['fundos']) && empty($config['codes']['fundos'])){
+            throw new \InvalidArgumentException("Fundos node cannot be empty");
         }
 
         $this->settings = new ConfigComponent($config);

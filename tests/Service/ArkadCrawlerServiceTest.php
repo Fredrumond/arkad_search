@@ -33,4 +33,28 @@ class ArkadCrawlerServiceTest extends TestCase
         ];
         $service = new ArkadCrawlerService($config);
     }
+
+    public function testInitServiceEmptyCodesAcoes()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Acoes node cannot be empty");
+        $config = [
+            "codes" => [
+                "acoes" => []
+            ]
+        ];
+        $service = new ArkadCrawlerService($config);
+    }
+
+    public function testInitServiceEmptyCodesFundos()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Fundos node cannot be empty");
+        $config = [
+            "codes" => [
+                "fundos" => []
+            ]
+        ];
+        $service = new ArkadCrawlerService($config);
+    }
 }
