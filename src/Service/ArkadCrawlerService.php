@@ -9,6 +9,7 @@ use Fredrumond\ArkadCrawler\Components\ConfigComponent;
 use Fredrumond\ArkadCrawler\Components\CrawlerComponent;
 use Fredrumond\ArkadCrawler\Components\HttpComponent;
 use Fredrumond\ArkadCrawler\Components\StatusInvestComponent;
+use http\Exception\InvalidArgumentException;
 
 class ArkadCrawlerService
 {
@@ -19,6 +20,10 @@ class ArkadCrawlerService
     {
         if(empty($config)){
             throw new Exception("Cannot start without parameters");
+        }
+
+        if(!isset($config['codes'])){
+            throw new \InvalidArgumentException("Code node not found");
         }
 
         $this->settings = new ConfigComponent($config);

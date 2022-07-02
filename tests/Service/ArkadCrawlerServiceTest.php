@@ -13,4 +13,14 @@ class ArkadCrawlerServiceTest extends TestCase
         $config = [];
         $service = new ArkadCrawlerService($config);
     }
+
+    public function testInitServiceInvalidParams()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Code node not found");
+        $config = [
+            "teste" =>[]
+        ];
+        $service = new ArkadCrawlerService($config);
+    }
 }
