@@ -18,29 +18,11 @@ class ArkadCrawlerService
 
     public function __construct(array $config)
     {
-        if(empty($config)){
-            throw new Exception("Cannot start without parameters");
+        if($this->isValidArguments($config)){
+            $this->settings = new ConfigComponent($config);
+            $this->codes = $this->settings->extractCodes();
+            $this->httpClient = new HttpComponent(new GuzzleHttpAdapter());
         }
-
-        if(!isset($config['codes'])){
-            throw new \InvalidArgumentException("Code node not found");
-        }
-
-        if (!array_key_exists("acoes",$config['codes']) && !array_key_exists("fundos",$config['codes'])){
-            throw new \InvalidArgumentException("Code needs a fundos and/or ações node");
-        }
-
-        if(isset($config['codes']['acoes']) && empty($config['codes']['acoes'])){
-            throw new \InvalidArgumentException("Acoes node cannot be empty");
-        }
-
-        if(isset($config['codes']['fundos']) && empty($config['codes']['fundos'])){
-            throw new \InvalidArgumentException("Fundos node cannot be empty");
-        }
-
-        $this->settings = new ConfigComponent($config);
-        $this->codes = $this->settings->extractCodes();
-        $this->httpClient = new HttpComponent(new GuzzleHttpAdapter());
     }
 
     public function search(): array
@@ -67,5 +49,30 @@ class ArkadCrawlerService
         $crawler->filter($dataSource, $type);
 
         return $active->infos();
+    }
+
+    private function isValidArguments($config): bool
+    {
+        if(empty($config)){
+            throw new Exception("Cannot start without parameters");
+        }
+
+        if(!isset($config['codes'])){
+            throw new \InvalidArgumentException("Code node not found");
+        }
+
+        if (!array_key_exists("acoes",$config['codes']) && !array_key_exists("fundos",$config['codes'])){
+            throw new \InvalidArgumentException("Code needs a fundos and/or ações node");
+        }
+
+        if(isset($config['codes']['acoes']) && empty($config['codes']['acoes'])){
+            throw new \InvalidArgumentException("Acoes node cannot be empty");
+        }
+
+        if(isset($config['codes']['fundos']) && empty($config['codes']['fundos'])){
+            throw new \InvalidArgumentException("Fundos node cannot be empty");
+        }
+
+        return true;
     }
 }
