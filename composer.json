@@ -18,7 +18,11 @@
         "squizlabs/php_codesniffer": "*",
         "phan/phan": "^5.3"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
     "scripts":{
-        "phpcs":"php vendor/bin/phpcs --standard=psr12 src --colors"
+        "phpcs":"php vendor/bin/phpcs --standard=psr12 src --colors",
+        "test": "vendor/bin/phpunit"
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Fredrumond\ArkadCrawler\Service;
 
+use Exception;
 use Fredrumond\ArkadCrawler\Adapter\Crawler\DomCrawlerAdapter;
 use Fredrumond\ArkadCrawler\Adapter\Http\GuzzleHttpAdapter;
 use Fredrumond\ArkadCrawler\Components\ConfigComponent;
@@ -16,6 +17,10 @@ class ArkadCrawlerService
 
     public function __construct(array $config)
     {
+        if(empty($config)){
+            throw new Exception("Cannot start without parameters");
+        }
+
         $this->settings = new ConfigComponent($config);
         $this->codes = $this->settings->extractCodes();
         $this->httpClient = new HttpComponent(new GuzzleHttpAdapter());
