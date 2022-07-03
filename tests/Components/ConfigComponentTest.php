@@ -5,17 +5,32 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigComponentTest extends TestCase
 {
-    public function testValidConstruct()
+    public function createTemplateConfigComponent()
     {
         $config = [
             "codes" => [
+                "acoes" => [
+                    "itub3"
+                ],
                 "fundos" => [
                     "hsml11"
                 ]
             ]
         ];
-        $config = new ConfigComponent($config);
+        return new ConfigComponent($config);
+    }
+
+    public function testValidConstruct()
+    {
+        $config = $this->createTemplateConfigComponent();
         $this->assertInstanceOf(ConfigComponent::class,$config);
+    }
+
+    public function testExtractCode()
+    {
+        $config = $this->createTemplateConfigComponent();
+        $extract = $config->extractCodes();
+        $this->assertCount(2,$extract);
     }
 
 }
