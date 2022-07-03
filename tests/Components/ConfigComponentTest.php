@@ -1,7 +1,6 @@
 <?php
 
 use Fredrumond\ArkadCrawler\Components\ConfigComponent;
-use Fredrumond\ArkadCrawler\Domain\Active\ActiveAcao;
 use PHPUnit\Framework\TestCase;
 
 class ConfigComponentTest extends TestCase
