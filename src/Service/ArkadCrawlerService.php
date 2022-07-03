@@ -9,7 +9,6 @@ use Fredrumond\ArkadCrawler\Components\ConfigComponent;
 use Fredrumond\ArkadCrawler\Components\CrawlerComponent;
 use Fredrumond\ArkadCrawler\Components\HttpComponent;
 use Fredrumond\ArkadCrawler\Components\StatusInvestComponent;
-use http\Exception\InvalidArgumentException;
 
 class ArkadCrawlerService
 {
@@ -18,7 +17,7 @@ class ArkadCrawlerService
 
     public function __construct(array $config)
     {
-        if($this->isValidArguments($config)){
+        if ($this->isValidArguments($config)) {
             $this->settings = new ConfigComponent($config);
             $this->codes = $this->settings->extractCodes();
             $this->httpClient = new HttpComponent(new GuzzleHttpAdapter());
@@ -27,13 +26,17 @@ class ArkadCrawlerService
 
     public function search(): array
     {
-        $infos = [];
-        foreach ($this->codes['acoes'] as $code) {
-            $infos[] = $this->process('acoes', $code);
-        }
+        $acoes = $this->searchByCode($this->codes[ConfigComponent::KEY_ACAO], ConfigComponent::KEY_ACAO);
+        $fundos = $this->searchByCode($this->codes[ConfigComponent::KEY_FUNDOS], ConfigComponent::KEY_FUNDOS);
 
-        foreach ($this->codes['fundos'] as $code) {
-            $infos[] = $this->process('fundos', $code);
+        return array_merge($acoes, $fundos);
+    }
+
+    private function searchByCode($codes, $type): array
+    {
+        $infos = [];
+        foreach ($codes as $code) {
+            $infos[] = $this->process($type, $code);
         }
 
         return $infos;
@@ -53,23 +56,23 @@ class ArkadCrawlerService
 
     private function isValidArguments($config): bool
     {
-        if(empty($config)){
+        if (empty($config)) {
             throw new Exception("Cannot start without parameters");
         }
 
-        if(!isset($config['codes'])){
+        if (!isset($config[ConfigComponent::KEY_CODES])) {
             throw new \InvalidArgumentException("Code node not found");
         }
 
-        if (!array_key_exists("acoes",$config['codes']) && !array_key_exists("fundos",$config['codes'])){
+        if (!array_key_exists(ConfigComponent::KEY_ACAO, $config[ConfigComponent::KEY_CODES]) && !array_key_exists(ConfigComponent::KEY_FUNDOS, $config[ConfigComponent::KEY_CODES])) {
             throw new \InvalidArgumentException("Code needs a fundos and/or ações node");
         }
 
-        if(isset($config['codes']['acoes']) && empty($config['codes']['acoes'])){
+        if (isset($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_ACAO]) && empty($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_FUNDOS])) {
             throw new \InvalidArgumentException("Acoes node cannot be empty");
         }
 
-        if(isset($config['codes']['fundos']) && empty($config['codes']['fundos'])){
+        if (isset($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_FUNDOS]) && empty($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_FUNDOS])) {
             throw new \InvalidArgumentException("Fundos node cannot be empty");
         }
 

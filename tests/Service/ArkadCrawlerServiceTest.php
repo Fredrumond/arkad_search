@@ -58,6 +58,19 @@ class ArkadCrawlerServiceTest extends TestCase
         $service = new ArkadCrawlerService($config);
     }
 
+    public function testValidConstruct()
+    {
+        $config = [
+            "codes" => [
+                "fundos" => [
+                    "hsml11"
+                ]
+            ]
+        ];
+        $service = new ArkadCrawlerService($config);
+        $this->assertInstanceOf(ArkadCrawlerService::class,$service);
+    }
+
     public function testSearchResult()
     {
         $config = [
@@ -81,16 +94,4 @@ class ArkadCrawlerServiceTest extends TestCase
         $this->assertCount(2,$result);
     }
 
-    public function testValidConstruct()
-    {
-        $config = [
-            "codes" => [
-                "fundos" => [
-                    "hsml11"
-                ]
-            ]
-        ];
-        $service = new ArkadCrawlerService($config);
-        $this->assertInstanceOf(ArkadCrawlerService::class,$service);
-    }
 }
