@@ -70,8 +70,14 @@ class ArkadCrawlerServiceTest extends TestCase
                 ]
             ]
         ];
-        $service = new ArkadCrawlerService($config);
+        $service = $this->createMock(ArkadCrawlerService::class);
+        $service->method('search')->willReturn(
+            [
+               [],[]
+            ]
+        );
+
         $result = $service->search();
-        $this->assertEquals(2,sizeof($result));
+        $this->assertCount(2,$result);
     }
 }
