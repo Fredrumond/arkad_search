@@ -23,6 +23,7 @@
     },
     "scripts":{
         "phpcs":"php vendor/bin/phpcs --standard=psr12 src --colors",
-        "test": "vendor/bin/phpunit"
+        "test": "vendor/bin/phpunit",
+        "test-cover": "vendor/bin/phpunit --whitelist /src --coverage-html cover/"
     }
 }

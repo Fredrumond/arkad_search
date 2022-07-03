@@ -57,4 +57,21 @@ class ArkadCrawlerServiceTest extends TestCase
         ];
         $service = new ArkadCrawlerService($config);
     }
+
+    public function testSearchResult()
+    {
+        $config = [
+            "codes" => [
+                "acoes" => [
+                    "itub3"
+                ],
+                "fundos" => [
+                    "hsml11"
+                ]
+            ]
+        ];
+        $service = new ArkadCrawlerService($config);
+        $result = $service->search();
+        $this->assertEquals(2,sizeof($result));
+    }
 }
