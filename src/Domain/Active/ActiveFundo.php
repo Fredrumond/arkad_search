@@ -151,7 +151,7 @@ class ActiveFundo implements ActiveInterface
                 "quotaHolders" => $this->quotaHolders,
                 "total" => $this->quotas
             ],
-            "p/vp" => $this->pvp,
+            "pvp" => $this->pvp,
             "marketValue" => $this->marketValue,
         ];
     }
