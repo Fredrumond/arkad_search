@@ -4,3 +4,4 @@ docker
 cover
 teste.php
 docker-compose.yml
+.phpunit.result.cache
