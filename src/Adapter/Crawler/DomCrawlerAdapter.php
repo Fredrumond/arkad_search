@@ -23,8 +23,6 @@ class DomCrawlerAdapter implements CrawlerAdapter
     {
         foreach ($this->crawler->filter('.top-info .info') as $key => $domElement) {
             $domElementSanetize = str_replace("\n", "", $domElement->nodeValue);
-            echo $key . "======";
-            var_dump($domElementSanetize);
             $dataSource->setElement($domElementSanetize);
 
             if ($key == 0) {
