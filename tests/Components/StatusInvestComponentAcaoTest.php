@@ -25,6 +25,22 @@ class StatusInvestComponentAcaoTest extends TestCase
         $this->assertInstanceOf(StatusInvestComponent::class,$statusInvestComponent);
     }
 
+    public function testName()
+    {
+        $create = $this->createActive('ITUB3 - BANCO ITAU UNIBANCOHOMEAçõesITUB3account_balance_walletbookmarkbookmark_border CompararCompare rentabilidadeCompare Ações');
+        $create[0]->setActiveName();
+        $result = $create[1]->infos();
+        $this->assertEquals('BANCO ITAU UNIBANCO',$result->infos['name']);
+    }
+
+    public function testCode()
+    {
+        $create = $this->createActive('ITUB3 - BANCO ITAU UNIBANCOHOMEAçõesITUB3account_balance_walletbookmarkbookmark_border CompararCompare rentabilidadeCompare Ações');
+        $create[0]->setActiveName();
+        $result = $create[1]->infos();
+        $this->assertEquals('ITUB3',$result->infos['code']);
+    }
+
     public function testCurrentPriceDownward()
     {
         $create = $this->createActive('Valor atualR$19,44arrow_downward-0,66%');

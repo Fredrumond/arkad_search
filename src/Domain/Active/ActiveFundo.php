@@ -5,6 +5,7 @@ namespace Fredrumond\ArkadCrawler\Domain\Active;
 class ActiveFundo implements ActiveInterface
 {
     private $name;
+    private $code;
     private $price;
     private $variation;
     private $minPriceLastWeekends;
@@ -23,6 +24,16 @@ class ActiveFundo implements ActiveInterface
     private $cashValuePercent;
     private $quotaHolders;
     private $quotas;
+
+    public function name($name)
+    {
+        $this->name = $name;
+    }
+
+    public function code($code)
+    {
+        $this->code = $code;
+    }
 
     public function price($price)
     {
@@ -117,6 +128,10 @@ class ActiveFundo implements ActiveInterface
     public function infos(): object
     {
         return (object)[
+            "infos" => [
+                "name" => $this->name,
+                "code" => $this->code
+            ],
             "current" => [
                 "price" => $this->price,
                 "variation" => $this->variation,

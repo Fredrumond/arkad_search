@@ -4,6 +4,10 @@ namespace Fredrumond\ArkadCrawler\Domain\Active;
 
 interface ActiveInterface
 {
+    public function name($name);
+
+    public function code($code);
+
     public function price($price);
 
     public function variation($variation);
