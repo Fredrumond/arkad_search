@@ -19,6 +19,16 @@ class StatusInvestComponent
         $this->element = $element;
     }
 
+    public function setActiveName(): void
+    {
+        $data = explode("HOME", $this->element);
+        $dataSnetize = explode(" - ", $data[0]);
+        $code = $dataSnetize[0];
+        $name = $dataSnetize[1];
+        $this->active->code($code);
+        $this->active->name($name);
+    }
+
     public function currentPrice(): void
     {
         $data = explode("arrow", $this->element);

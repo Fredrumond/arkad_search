@@ -5,6 +5,7 @@ namespace Fredrumond\ArkadCrawler\Domain\Active;
 class ActiveAcao implements ActiveInterface
 {
     private $name;
+    private $code;
     private $price;
     private $variation;
     private $minPriceLastWeekends;
@@ -15,6 +16,16 @@ class ActiveAcao implements ActiveInterface
     private $dividendYieldPercent;
     private $appreciationLast12Months;
     private $appreciationCurrentMonths;
+
+    public function name($name)
+    {
+        $this->name = $name;
+    }
+
+    public function code($code)
+    {
+        $this->code = $code;
+    }
 
     public function price($price)
     {
@@ -69,6 +80,10 @@ class ActiveAcao implements ActiveInterface
     public function infos(): object
     {
         return (object)[
+            "infos" => [
+                "name" => $this->name,
+                "code" => $this->code
+            ],
             "current" => [
                 "price" => $this->price,
                 "variation" => $this->variation,

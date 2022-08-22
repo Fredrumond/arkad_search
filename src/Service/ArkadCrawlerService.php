@@ -29,11 +29,11 @@ class ArkadCrawlerService
         $acoes = [];
         $fundos = [];
 
-        if(isset($this->codes[ConfigComponent::KEY_ACAO])){
+        if (isset($this->codes[ConfigComponent::KEY_ACAO])) {
             $acoes = $this->searchByCode($this->codes[ConfigComponent::KEY_ACAO], ConfigComponent::KEY_ACAO);
         }
 
-        if(isset($this->codes[ConfigComponent::KEY_FUNDOS])){
+        if (isset($this->codes[ConfigComponent::KEY_FUNDOS])) {
             $fundos = $this->searchByCode($this->codes[ConfigComponent::KEY_FUNDOS], ConfigComponent::KEY_FUNDOS);
         }
 
@@ -57,7 +57,7 @@ class ArkadCrawlerService
         $dataSource = new StatusInvestComponent($active);
         $response = $this->httpClient->get('GET', $this->settings->extractUrl($type) . $code);
         $crawler->addContent($response->getBody());
-        $crawler->filter($dataSource, $type);
+        $crawler->filter($dataSource, $type, $code);
 
         return $active->infos();
     }
@@ -72,16 +72,17 @@ class ArkadCrawlerService
             throw new \InvalidArgumentException("Code node not found");
         }
 
-//        print_r($config);die();
-//        if (!array_key_exists(ConfigComponent::KEY_ACAO, $config[ConfigComponent::KEY_CODES]) || !array_key_exists(ConfigComponent::KEY_FUNDOS, $config[ConfigComponent::KEY_CODES])) {
-//            throw new \InvalidArgumentException("Code needs a fundos and/or ações node");
-//        }
-
-        if (isset($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_ACAO]) && empty($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_FUNDOS])) {
+        if (
+            isset($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_ACAO]) &&
+            empty($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_ACAO])
+        ) {
             throw new \InvalidArgumentException("Acoes node cannot be empty");
         }
 
-        if (isset($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_FUNDOS]) && empty($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_FUNDOS])) {
+        if (
+            isset($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_FUNDOS]) &&
+            empty($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_FUNDOS])
+        ) {
             throw new \InvalidArgumentException("Fundos node cannot be empty");
         }
 

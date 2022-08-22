@@ -25,6 +25,22 @@ class StatusInvestComponentFundoTest extends TestCase
         $this->assertInstanceOf(StatusInvestComponent::class,$statusInvestComponent);
     }
 
+    public function testName()
+    {
+        $create = $this->createActive('HSML11 - HSI MALL FDO INV IMOBHOMEFundos ImobiliáriosHSML11account_balance_walletbookmarkbookmark_border CompararCompare rentabilidadeCompare FIIs');
+        $create[0]->setActiveName();
+        $result = $create[1]->infos();
+        $this->assertEquals('HSI MALL FDO INV IMOB',$result->infos['name']);
+    }
+
+    public function testCode()
+    {
+        $create = $this->createActive('HSML11 - HSI MALL FDO INV IMOBHOMEFundos ImobiliáriosHSML11account_balance_walletbookmarkbookmark_border CompararCompare rentabilidadeCompare FIIs');
+        $create[0]->setActiveName();
+        $result = $create[1]->infos();
+        $this->assertEquals('HSML11',$result->infos['code']);
+    }
+
     public function testCurrentPriceDownward()
     {
         $create = $this->createActive('Valor atualR$19,44arrow_downward-0,66%');
