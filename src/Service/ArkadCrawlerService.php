@@ -26,8 +26,16 @@ class ArkadCrawlerService
 
     public function search(): array
     {
-        $acoes = $this->searchByCode($this->codes[ConfigComponent::KEY_ACAO], ConfigComponent::KEY_ACAO);
-        $fundos = $this->searchByCode($this->codes[ConfigComponent::KEY_FUNDOS], ConfigComponent::KEY_FUNDOS);
+        $acoes = [];
+        $fundos = [];
+
+        if(isset($this->codes[ConfigComponent::KEY_ACAO])){
+            $acoes = $this->searchByCode($this->codes[ConfigComponent::KEY_ACAO], ConfigComponent::KEY_ACAO);
+        }
+
+        if(isset($this->codes[ConfigComponent::KEY_FUNDOS])){
+            $fundos = $this->searchByCode($this->codes[ConfigComponent::KEY_FUNDOS], ConfigComponent::KEY_FUNDOS);
+        }
 
         return array_merge($acoes, $fundos);
     }
@@ -64,9 +72,10 @@ class ArkadCrawlerService
             throw new \InvalidArgumentException("Code node not found");
         }
 
-        if (!array_key_exists(ConfigComponent::KEY_ACAO, $config[ConfigComponent::KEY_CODES]) && !array_key_exists(ConfigComponent::KEY_FUNDOS, $config[ConfigComponent::KEY_CODES])) {
-            throw new \InvalidArgumentException("Code needs a fundos and/or ações node");
-        }
+//        print_r($config);die();
+//        if (!array_key_exists(ConfigComponent::KEY_ACAO, $config[ConfigComponent::KEY_CODES]) || !array_key_exists(ConfigComponent::KEY_FUNDOS, $config[ConfigComponent::KEY_CODES])) {
+//            throw new \InvalidArgumentException("Code needs a fundos and/or ações node");
+//        }
 
         if (isset($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_ACAO]) && empty($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_FUNDOS])) {
             throw new \InvalidArgumentException("Acoes node cannot be empty");
