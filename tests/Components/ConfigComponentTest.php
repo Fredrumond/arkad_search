@@ -1,6 +1,8 @@
 <?php
 
 use Fredrumond\ArkadCrawler\Components\ConfigComponent;
+use Fredrumond\ArkadCrawler\Domain\DataSource\DataSourceFactory;
+use Fredrumond\ArkadCrawler\Domain\DataSource\DataSourceInterface;
 use PHPUnit\Framework\TestCase;
 
 class ConfigComponentTest extends TestCase
@@ -15,15 +17,18 @@ class ConfigComponentTest extends TestCase
                 "fundos" => [
                     "hsml11"
                 ]
-            ]
+            ],
+            "dataSource" => 'statusInvest'
         ];
-        return new ConfigComponent($config);
+        $dataSourceFactory = new DataSourceFactory();
+        $configComponent = new ConfigComponent($dataSourceFactory);
+        return $configComponent->chooseDataSource($config);
     }
 
     public function testValidConstruct()
     {
         $config = $this->createTemplateConfigComponent();
-        $this->assertInstanceOf(ConfigComponent::class,$config);
+        $this->assertInstanceOf(DataSourceInterface::class,$config);
     }
 
     public function testExtractCode()

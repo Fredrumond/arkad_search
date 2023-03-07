@@ -22,11 +22,11 @@ class DomCrawlerAdapter implements CrawlerAdapter
     public function filter($dataSource, $type)
     {
 
-         foreach ($this->crawler->filter('.flex-nowrap') as $key => $domElement) {
+        foreach ($this->crawler->filter('.flex-nowrap') as $key => $domElement) {
              $domElementSanetize = str_replace("\n", "", $domElement->nodeValue);
              $dataSource->setElement($domElementSanetize);
              $dataSource->setActiveName();
-         }
+        }
 
         foreach ($this->crawler->filter('.top-info .info') as $key => $domElement) {
             $domElementSanetize = str_replace("\n", "", $domElement->nodeValue);

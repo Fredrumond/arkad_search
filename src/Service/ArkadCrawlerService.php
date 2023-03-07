@@ -8,7 +8,7 @@ use Fredrumond\ArkadCrawler\Adapter\Http\GuzzleHttpAdapter;
 use Fredrumond\ArkadCrawler\Components\ConfigComponent;
 use Fredrumond\ArkadCrawler\Components\CrawlerComponent;
 use Fredrumond\ArkadCrawler\Components\HttpComponent;
-use Fredrumond\ArkadCrawler\Components\StatusInvestComponent;
+use Fredrumond\ArkadCrawler\Domain\DataSource\DataSourceFactory;
 
 class ArkadCrawlerService
 {
@@ -17,8 +17,15 @@ class ArkadCrawlerService
 
     public function __construct(array $config)
     {
+        if (empty($config['dataSource'])) {
+            throw new Exception("Cannot start without dataSource");
+        }
+
+        $dataSourceFactory = new DataSourceFactory();
+        $configComponent = new ConfigComponent($dataSourceFactory);
+        $this->settings = $configComponent->chooseDataSource($config);
+
         if ($this->isValidArguments($config)) {
-            $this->settings = new ConfigComponent($config);
             $this->codes = $this->settings->extractCodes();
             $this->httpClient = new HttpComponent(new GuzzleHttpAdapter());
         }
@@ -29,12 +36,12 @@ class ArkadCrawlerService
         $acoes = [];
         $fundos = [];
 
-        if (isset($this->codes[ConfigComponent::KEY_ACAO])) {
-            $acoes = $this->searchByCode($this->codes[ConfigComponent::KEY_ACAO], ConfigComponent::KEY_ACAO);
+        if (isset($this->codes[$this->settings::KEY_ACAO])) {
+            $acoes = $this->searchByCode($this->codes[$this->settings::KEY_ACAO], $this->settings::KEY_ACAO);
         }
 
-        if (isset($this->codes[ConfigComponent::KEY_FUNDOS])) {
-            $fundos = $this->searchByCode($this->codes[ConfigComponent::KEY_FUNDOS], ConfigComponent::KEY_FUNDOS);
+        if (isset($this->codes[$this->settings::KEY_FUNDOS])) {
+            $fundos = $this->searchByCode($this->codes[$this->settings::KEY_FUNDOS], $this->settings::KEY_FUNDOS);
         }
 
         return array_merge($acoes, $fundos);
@@ -54,7 +61,7 @@ class ArkadCrawlerService
     {
         $active = $this->settings->extractActive($type);
         $crawler = new CrawlerComponent(new DomCrawlerAdapter());
-        $dataSource = new StatusInvestComponent($active);
+        $dataSource = $this->settings->component($active);
         $response = $this->httpClient->get('GET', $this->settings->extractUrl($type) . $code);
         $crawler->addContent($response->getBody());
         $crawler->filter($dataSource, $type, $code);
@@ -68,20 +75,20 @@ class ArkadCrawlerService
             throw new Exception("Cannot start without parameters");
         }
 
-        if (!isset($config[ConfigComponent::KEY_CODES])) {
+        if (!isset($config[$this->settings::KEY_CODES])) {
             throw new \InvalidArgumentException("Code node not found");
         }
 
         if (
-            isset($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_ACAO]) &&
-            empty($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_ACAO])
+            isset($config[$this->settings::KEY_CODES][$this->settings::KEY_ACAO]) &&
+            empty($config[$this->settings::KEY_CODES][$this->settings::KEY_ACAO])
         ) {
             throw new \InvalidArgumentException("Acoes node cannot be empty");
         }
 
         if (
-            isset($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_FUNDOS]) &&
-            empty($config[ConfigComponent::KEY_CODES][ConfigComponent::KEY_FUNDOS])
+            isset($config[$this->settings::KEY_CODES][$this->settings::KEY_FUNDOS]) &&
+            empty($config[$this->settings::KEY_CODES][$this->settings::KEY_FUNDOS])
         ) {
             throw new \InvalidArgumentException("Fundos node cannot be empty");
         }
