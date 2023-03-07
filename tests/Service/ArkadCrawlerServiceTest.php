@@ -5,21 +5,21 @@ use PHPUnit\Framework\TestCase;
 
 class ArkadCrawlerServiceTest extends TestCase
 {
-    public function testInitServiceWithoutConfigParams()
+    public function testInitServiceWithoutConfigDataSource()
     {
         $this->expectException("Exception");
-        $this->expectExceptionMessage("Cannot start without parameters");
+        $this->expectExceptionMessage("Cannot start without dataSource");
 
         $config = [];
         $service = new ArkadCrawlerService($config);
     }
-
     public function testInitServiceInvalidParams()
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("Code node not found");
         $config = [
-            "teste" =>[]
+            "teste" =>[],
+            "dataSource" => 'statusInvest'
         ];
         $service = new ArkadCrawlerService($config);
     }
@@ -31,7 +31,8 @@ class ArkadCrawlerServiceTest extends TestCase
         $config = [
             "codes" => [
                 "acoes" => []
-            ]
+            ],
+            "dataSource" => 'statusInvest'
         ];
         $service = new ArkadCrawlerService($config);
     }
@@ -43,7 +44,8 @@ class ArkadCrawlerServiceTest extends TestCase
         $config = [
             "codes" => [
                 "fundos" => []
-            ]
+            ],
+            "dataSource" => 'statusInvest'
         ];
         $service = new ArkadCrawlerService($config);
     }
@@ -55,7 +57,8 @@ class ArkadCrawlerServiceTest extends TestCase
                 "fundos" => [
                     "hsml11"
                 ]
-            ]
+            ],
+            "dataSource" => 'statusInvest'
         ];
         $service = new ArkadCrawlerService($config);
         $this->assertInstanceOf(ArkadCrawlerService::class,$service);
@@ -71,7 +74,8 @@ class ArkadCrawlerServiceTest extends TestCase
                 "fundos" => [
                     "hsml11"
                 ]
-            ]
+            ],
+            "dataSource" => 'statusInvest'
         ];
         $service = $this->createMock(ArkadCrawlerService::class);
         $service->method('search')->willReturn(
